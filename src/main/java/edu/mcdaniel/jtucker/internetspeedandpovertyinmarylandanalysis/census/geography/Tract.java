@@ -11,16 +11,10 @@ public class Tract {
     private final String stateCode;
     private final String geoIdStr;
     private final long geoIdNum;
-    private final long aLandM;
-    private final long aWaterM;
     private final double lat;
     private final double lng;
-    private final long totalArea;
     private final double westToEastLength;
     private final double northToSouthLength;
-
-    private double dLat;
-    private double dLong;
 
     private double leftTopLat;
     private double leftTopLng;
@@ -59,14 +53,12 @@ public class Tract {
         this.stateCode = stateCode;
         this.geoIdStr = geoIdStr;
         this.geoIdNum = geoIdNum;
-        this.aLandM = aLandM;
-        this.aWaterM = aWaterM;
         this.lat = lat * Math.PI / 180;
         this.lng = lng * Math.PI / 180;
 
-        this.totalArea = this.aLandM + this.aWaterM;
+        long totalArea = aLandM + aWaterM;
 
-        this.westToEastLength = Math.sqrt(this.totalArea);
+        this.westToEastLength = Math.sqrt(totalArea);
         this.northToSouthLength = this.westToEastLength;
 
         numberFormat.setMinimumFractionDigits(14);
@@ -84,20 +76,20 @@ public class Tract {
         double numerator = Math.pow(Math.sin((this.westToEastLength / 2) / R_EARTH), 2);
         double denominator = Math.pow(Math.cos(this.lat), 2);
         double arg = Math.sqrt(numerator/denominator);
-        this.dLong = 2 * Math.asin(arg);
+        double dLong = 2 * Math.asin(arg);
 
         // y change in lat
 
-        this.dLat = - this.northToSouthLength / R_EARTH;
+        double dLat = -this.northToSouthLength / R_EARTH;
 
-        this.leftBtmLat = 180 * (this.lat + this.dLat) / Math.PI;
+        this.leftBtmLat = 180 * (this.lat + dLat) / Math.PI;
         this.leftBtmLng = 180 * this.lng / Math.PI;
 
         this.rightTopLat = 180 * this.lat / Math.PI;
-        this.rightTopLng = 180 * (this.lng + this.dLong) / Math.PI;
+        this.rightTopLng = 180 * (this.lng + dLong) / Math.PI;
 
-        this.rightBtmLat = 180 * (this.lat + this.dLat) / Math.PI;
-        this.rightBtmLng = 180 * (this.lng + this.dLong) / Math.PI;
+        this.rightBtmLat = 180 * (this.lat + dLat) / Math.PI;
+        this.rightBtmLng = 180 * (this.lng + dLong) / Math.PI;
     }
 
     @Override

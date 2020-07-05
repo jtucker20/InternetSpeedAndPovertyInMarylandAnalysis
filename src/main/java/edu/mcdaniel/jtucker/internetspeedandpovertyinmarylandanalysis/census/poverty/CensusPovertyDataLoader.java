@@ -66,7 +66,7 @@ public class CensusPovertyDataLoader {
     /**
      * Major method to read in the data
      */
-    public void readInFile() throws CensusPovertyDataLoaderException {
+    public void readInFile() {
 
 
         //We try to read the lines of the file

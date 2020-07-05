@@ -7,7 +7,6 @@ import edu.mcdaniel.jtucker.internetspeedandpovertyinmarylandanalysis.census.geo
 import edu.mcdaniel.jtucker.internetspeedandpovertyinmarylandanalysis.census.poverty.CensusPovertyDataLoader;
 import edu.mcdaniel.jtucker.internetspeedandpovertyinmarylandanalysis.maryland.InternetSpeedDataLoader;
 import edu.mcdaniel.jtucker.internetspeedandpovertyinmarylandanalysis.maryland.Record;
-import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -24,11 +23,6 @@ public class Application {
     //=============================================================================================
     // Private Assets
     //=============================================================================================
-
-    /**
-     * The logging mechanism of the class.
-     */
-    private Logger log;
 
 
     //=============================================================================================
@@ -99,6 +93,21 @@ public class Application {
 
         carrollCountyTracts.forEach(tract -> internetSpeedByTract.put(tract.getGeoIdStr(), speedDataLoader.getSpeedForTract(tract)));
 
+        System.out.print("|GEOID         |POVERTY RATE  | MAX DL SPEED | MIN DL SPEED | AVG DL SPEED |\n");
+
+        carrollCountyTracts.forEach(tract -> {
+            String geoID = tract.getGeoIdStr();
+            String povRate = povertyRate.get(geoID);
+            Record speedRecord = internetSpeedByTract.get(geoID);
+
+            System.out.print("|" + geoID);
+            System.out.print("  |" + povRate);
+            System.out.print(" |" + speedRecord.getMax());
+            System.out.print(" |" + speedRecord.getMin());
+            System.out.print(" |" + speedRecord.getAvg() + " |" );
+            System.out.print("\n");
+
+        });
     }
 
 

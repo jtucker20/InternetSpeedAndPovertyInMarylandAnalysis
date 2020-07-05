@@ -37,7 +37,7 @@ public class InternetSpeedDataLoader {
     /**
      * File that will hold the link to the Census Geographic Data File
      */
-    private File internetSpeedFile;
+    private final File internetSpeedFile;
 
     /**
      * Field that will hold the data
@@ -146,7 +146,7 @@ public class InternetSpeedDataLoader {
 
         for(Map.Entry<Integer, Record> entry : internetSpeedByCensusTractRaw.entrySet()){
             String entryCensusTract = entry.getValue().getCensusTract();
-            if(entryCensusTract.contains("24013")){
+            if(entryCensusTract.contains(CARROLL_COUNTY_CENSUS_TRACT_PREFIX)){
                intermediaryList.put(entry.getKey(), entry.getValue());
                log.info(entry.getValue());
             }
@@ -162,10 +162,33 @@ public class InternetSpeedDataLoader {
                 }
             }
 
+            double min = 0;
+            double max = 0;
+            double avg = 0;
+            double count = 0;
+            double num = 0;
+            log.info("There are {} records in tract: {}", thisTractRecords.size(), tract.getGeoIdStr());
             for(Record record : thisTractRecords){
-
+                if(min == 0){
+                    min = Double.parseDouble(record.getMin());
+                } else {
+                    min = Math.min(min, Double.parseDouble(record.getMin()));
+                }
+                max = Math.max(max, Double.parseDouble(record.getMax()));
+                avg = avg + Double.parseDouble(record.getAvg());
+                count = count + Double.parseDouble(record.getCount());
+                num += 1;
             }
+            if(num>0) {
+                avg = avg / num;
+            }
+            Record record = new Record(max + "", min + "", avg + "", count + "", null, geoIdOfTract);
+            this.internetSpeedByCensusTractCollated.put(geoIdOfTract, record);
+
+            log.info("For Tract: {}, the record is: {}", geoIdOfTract, record);
         }
+
+
 
         log.info("Intermidiary List is: {} long.", intermediaryList.size());
     }

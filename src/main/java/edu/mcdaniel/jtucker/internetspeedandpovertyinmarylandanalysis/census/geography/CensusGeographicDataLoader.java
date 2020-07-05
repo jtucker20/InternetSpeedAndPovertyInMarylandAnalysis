@@ -33,7 +33,7 @@ public class CensusGeographicDataLoader {
     /**
      * File that will hold the link to the Census Geographic Data File
      */
-    private File censusDataFile;
+    private final File censusDataFile;
 
     /**
      * Field that will hold the values of State Codes
@@ -95,19 +95,9 @@ public class CensusGeographicDataLoader {
     //=============================================================================================
 
     /**
-     * This major method initializes the file.
-     */
-    public void setUp() throws CensusGeographicDataLoaderException {
-        if(!validate()){
-            throw new CensusGeographicDataLoaderException("Invalid File Setup.");
-        }
-
-    }
-
-    /**
      * Major method to read in the data
      */
-    public void readInFile() throws CensusGeographicDataLoaderException {
+    public void readInFile() {
 
 
         //We try to read the lines of the file
@@ -177,18 +167,6 @@ public class CensusGeographicDataLoader {
             log.info("Values Extracted: State={}, GeoId={}, aLand={}, aWater={}, lat={}, long={}",
                     stateVal, geoIdVal, aland, awater, lat, longitude);
         }
-    }
-
-    //=============================================================================================
-    // Minor Methods(s)
-    //=============================================================================================
-
-    /**
-     * validation method.
-     * @return true if valid.
-     */
-    public boolean validate(){
-        return this.censusDataFile != null && this.censusDataFile.canRead();
     }
 
 
