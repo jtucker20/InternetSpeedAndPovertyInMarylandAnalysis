@@ -108,6 +108,8 @@ public class Application {
             System.out.print("\n");
 
         });
+
+        System.out.println("The End");
     }
 
 
